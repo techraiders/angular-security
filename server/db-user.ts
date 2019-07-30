@@ -1,7 +1,5 @@
-
-
 export interface DbUser {
-    id:number;
-    email:string;
-    password:string;
+  id: number;
+  email: string;
+  passwordDigest: string;
 }
