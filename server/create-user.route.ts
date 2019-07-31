@@ -22,11 +22,8 @@ async function createUerAndSession(res: Response, credentials) {
   const passwordDigest = await argon2.hash(credentials.password);
   const user = db.createUser(credentials.email, passwordDigest);
 
-  console.log(user);
-
   const bytes = await randomBytes(32);
   const sessionId = bytes.toString("hex");
-  console.log("sessionId", sessionId);
 
   sessionStore.createSession(sessionId, user);
 
