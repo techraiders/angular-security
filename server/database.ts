@@ -1,57 +1,43 @@
-
-import * as _ from 'lodash';
-import {LESSONS, USERS} from "./database-data";
-import {DbUser} from "./db-user";
-
+import * as _ from "lodash";
+import { LESSONS, USERS } from "./database-data";
+import { DbUser } from "./db-user";
 
 class InMemoryDatabase {
+  userCounter = 0;
 
-    userCounter = 0;
+  readAllLessons() {
+    return _.values(LESSONS);
+  }
 
-    readAllLessons() {
-        return _.values(LESSONS);
+  createUser(email: string, passwordDigest: string) {
+    const usersPerEmail = _.keyBy(_.values(USERS), "email");
+
+    if (usersPerEmail[email]) {
+      const message = "An user already exists with email " + email;
+      console.error(message);
+      throw new Error(message);
     }
 
-    createUser(email:string,passwordDigest:string) {
+    this.userCounter++;
 
-        const usersPerEmail = _.keyBy( _.values(USERS), "email" );
+    const id = this.userCounter;
 
-        if (usersPerEmail[email]) {
-            const message = "An user already exists with email " + email;
-            console.error(message);
-            throw new Error(message);
-        }
+    const user: DbUser = {
+      id,
+      email,
+      passwordDigest
+    };
 
-        this.userCounter++;
+    USERS[id] = user;
 
-        const id = this.userCounter;
+    return user;
+  }
 
-        const user: DbUser = {
-            id,
-            email,
-            passwordDigest
-        };
+  findUserByEmail(email: string): DbUser {
+    const users = _.values(USERS);
 
-        USERS[id] = user;
-
-        console.log(USERS);
-
-        return user;
-    }
-
-
-    findUserByEmail(email:string) :DbUser {
-
-        const users = _.values(USERS);
-
-        return _.find(users, user => user.email === email);
-    }
-
+    return _.find(users, user => user.email === email);
+  }
 }
 
-
-
-
 export const db = new InMemoryDatabase();
-
-
