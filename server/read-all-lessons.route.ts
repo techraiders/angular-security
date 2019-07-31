@@ -1,9 +1,16 @@
+import { db } from "./database";
+import { sessionStore } from "./session-store";
+import { Request, Response } from "express";
 
-import {db} from "./database";
+export function readAllLessons(req: Request, res: Response) {
+  const {
+    cookies: { SESSIONID }
+  } = req;
+  const isSessionValid = sessionStore.isSessionValid(SESSIONID);
 
-
-export function readAllLessons(req, res) {
-
-    res.status(200).json(db.readAllLessons());
-
+  if (isSessionValid) {
+    res.status(200).json({ lessons: db.readAllLessons() });
+  } else {
+    res.sendStatus(403);
+  }
 }

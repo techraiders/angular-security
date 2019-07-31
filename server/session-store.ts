@@ -11,13 +11,16 @@ class SessionStore {
   findUserBySessionId(sessionId): User {
     if (sessionId) {
       const session = this.sessions[sessionId];
-      let isSessionValid;
-      if (session) {
-        isSessionValid = session.isValid();
-      }
-
-      if (isSessionValid) {
+      if (session && session.isValid()) {
         return session.user;
+      }
+    }
+  }
+  isSessionValid(sessionId: string) {
+    if (sessionId) {
+      const session = this.sessions[sessionId];
+      if (session) {
+        return session.isValid();
       }
     }
   }

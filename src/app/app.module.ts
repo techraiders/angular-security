@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 
 import { AuthService } from "./services/auth.service";
 import "rxjs/add/operator/filter";
+import "rxjs/add/operator/map";
 
 @NgModule({
   declarations: [
