@@ -3,6 +3,7 @@ const util = require("util");
 const crypto = require("crypto");
 import * as jwt from "jsonwebtoken";
 import * as fs from "fs";
+import * as argon2 from "argon2";
 
 export const randomBytes = util.promisify(crypto.randomBytes);
 
@@ -26,4 +27,16 @@ export async function decodeJwt(token: string) {
   const payload = await jwt.verify(token, RSA_PUBLIC_KEY);
   console.log("decoded payload", payload);
   return payload;
+}
+
+export async function createCsrfToken(sessionToken: string) {
+  // try {
+  //   const bytes = await randomBytes(32);
+  //   if (bytes) {
+  //     return bytes.toString("hex");
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
+  return argon2.hash(sessionToken);
 }
